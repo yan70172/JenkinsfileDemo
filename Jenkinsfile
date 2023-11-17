@@ -36,13 +36,8 @@ pipeline {
   }
   post {
     always {
-
+      echo 'post Always'
     }
-    success {
-
-    }
-    failure {
-
-    }
+    
   }
 }
