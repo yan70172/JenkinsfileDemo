@@ -21,16 +21,12 @@ pipeline {
     }
     
     stage ("build") {
-      when {
-        expression {
-          BRANCH_NAME == 'master' && CODE_CHANGE == true
-        }
-      }
+      
       
       steps {
-        echo 'building the application ...'
-        echo 'building version ${NEW_VERSION}'
-        echo "building version ${NEW_VERSION}"
+        script {
+          gv.buildApp()
+        }
       }
     }
 
@@ -41,21 +37,17 @@ pipeline {
         }
       }
       steps {
-        echo 'testing the application ...'
+        script {
+          gv.testApp()
+        }
       }
     }
 
     stage ("deploy") {
       steps {
-        echo 'deploying the application ...'
-
-        withCredentials([
-          usernamePassword(credentialsId: 'MyGitHub', usernameVariable: USER, passwordVariable: PWD)
-        ]){
-          echo "User: ${USER}"
-          echo "Password: ${PWD}"
+        script {
+          gv.deployApp()
         }
-        
       }
     }
   }
